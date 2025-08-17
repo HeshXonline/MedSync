@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MedSync/static/css/main.2e8c9368.css",
+    "main.js": "/MedSync/static/js/main.0dd9459f.js",
+    "index.html": "/MedSync/index.html",
+    "main.2e8c9368.css.map": "/MedSync/static/css/main.2e8c9368.css.map",
+    "main.0dd9459f.js.map": "/MedSync/static/js/main.0dd9459f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e8c9368.css",
+    "static/js/main.0dd9459f.js"
+  ]
+}
