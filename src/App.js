@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
@@ -8,6 +9,8 @@ import Appointments from "./pages/Appointments";
 import Treatments from "./pages/Treatments";
 import Billing from "./pages/Billing";
 import Reporting from "./pages/Reporting";
+import NotAuthorized from "./pages/NotAuthorized";
+import { ROLES } from "./roles";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,34 +45,53 @@ function App() {
         />
         <Route
           path="/"
-          element={isAuthenticated ? <Dashboard role={userRole} /> : <Navigate to="/login" replace />}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} userRole={userRole}>
+              <Dashboard role={userRole} />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/patients"
-          element={isAuthenticated ? <Patients role={userRole} /> : <Navigate to="/login" replace />}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} userRole={userRole} allowedRoles={[ROLES.ADMIN_STAFF, ROLES.DOCTOR, ROLES.BILLING_STAFF, ROLES.SYSTEM_ADMIN]}>
+              <Patients role={userRole} />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/appointments"
           element={
-            isAuthenticated ? (
+            <ProtectedRoute isAuthenticated={isAuthenticated} userRole={userRole} allowedRoles={[ROLES.ADMIN_STAFF, ROLES.DOCTOR, ROLES.PATIENT, ROLES.SYSTEM_ADMIN]}>
               <Appointments role={userRole} branch={selectedBranch} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
+            </ProtectedRoute>
           }
         />
         <Route
           path="/treatments"
-          element={isAuthenticated ? <Treatments role={userRole} /> : <Navigate to="/login" replace />}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} userRole={userRole} allowedRoles={[ROLES.DOCTOR, ROLES.SYSTEM_ADMIN]}>
+              <Treatments role={userRole} />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/billing"
-          element={isAuthenticated ? <Billing role={userRole} /> : <Navigate to="/login" replace />}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} userRole={userRole} allowedRoles={[ROLES.BILLING_STAFF, ROLES.SYSTEM_ADMIN]}>
+              <Billing role={userRole} />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/reporting"
-          element={isAuthenticated ? <Reporting role={userRole} /> : <Navigate to="/login" replace />}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} userRole={userRole} allowedRoles={[ROLES.ADMIN_STAFF, ROLES.BILLING_STAFF, ROLES.SYSTEM_ADMIN]}>
+              <Reporting role={userRole} />
+            </ProtectedRoute>
+          }
         />
+        <Route path="/403" element={<NotAuthorized />} />
       </Routes>
     </>
   );
