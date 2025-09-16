@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ROLES } from '../roles';
 
 const Treatments = ({ role }) => {
   const [catalogue, setCatalogue] = useState([
@@ -29,14 +30,22 @@ const Treatments = ({ role }) => {
       </ul>
 
       {/* Prescription Interface */}
-      <h2>Prescribe Treatments</h2>
-      <select multiple value={selectedTreatments} onChange={(e) => setSelectedTreatments(Array.from(e.target.selectedOptions, option => option.value))}>
-        {catalogue.map(t => <option key={t.id}>{t.name}</option>)}
-      </select>
-      <input value={dosage} onChange={(e) => setDosage(e.target.value)} placeholder="Dosage/Instructions" />
-      {/* Notes Editor */}
-      <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Consultation Notes (Templates: Use voice-to-text placeholder)" />
-      <button onClick={handlePrescribe}>Prescribe</button>
+      {(role === ROLES.DOCTOR || role === ROLES.SYSTEM_ADMIN) && (
+        <div className="card">
+          <h2>Prescribe Treatments</h2>
+          <div className="grid two">
+            <select multiple value={selectedTreatments} onChange={(e) => setSelectedTreatments(Array.from(e.target.selectedOptions, option => option.value))}>
+              {catalogue.map(t => <option key={t.id}>{t.name}</option>)}
+            </select>
+            <input value={dosage} onChange={(e) => setDosage(e.target.value)} placeholder="Dosage/Instructions" />
+          </div>
+          {/* Notes Editor */}
+          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Consultation Notes" />
+          <div className="actions">
+            <button onClick={handlePrescribe}>Prescribe</button>
+          </div>
+        </div>
+      )}
 
       {/* History View */}
       <h2>Treatment History</h2>
