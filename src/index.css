@@ -25,6 +25,12 @@ nav a {
   text-decoration: none;
 }
 
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -47,6 +53,10 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  background-color: #0056b3;
+}
+
 .error {
   color: red;
   font-size: 0.9em;
@@ -55,6 +65,20 @@ button {
 .tab-content {
   border: 1px solid #ddd;
   padding: 20px;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
 @media (max-width: 768px) {
@@ -76,4 +100,13 @@ button:focus, input:focus {
 .logo {
   font-size: 1.5em;
   font-weight: bold;
+}
+
+/* Header layout tweaks */
+header > div, header nav, header button {
+  margin: 0 8px;
+}
+
+header nav ul li [aria-current="page"] {
+  text-decoration: underline;
 }

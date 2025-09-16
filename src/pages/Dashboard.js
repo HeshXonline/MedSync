@@ -1,4 +1,5 @@
 import React from 'react';
+import { ROLES } from '../roles';
 
 const Dashboard = ({ role }) => {
   // Mock KPIs
@@ -14,9 +15,12 @@ const Dashboard = ({ role }) => {
       <div className="dashboard">
         <h2>Key Metrics</h2>
         <p>Appointments Today: {kpis.appointmentsToday}</p>
-        <p>Revenue: LKR {kpis.revenue}</p>
-        <p>Outstanding Balances: LKR {kpis.outstanding}</p>
-        {/* Simple chart simulation with CSS */}
+        {(role === ROLES.BILLING_STAFF || role === ROLES.SYSTEM_ADMIN) && (
+          <p>Revenue: LKR {kpis.revenue}</p>
+        )}
+        {(role === ROLES.ADMIN_STAFF || role === ROLES.BILLING_STAFF || role === ROLES.SYSTEM_ADMIN) && (
+          <p>Outstanding Balances: LKR {kpis.outstanding}</p>
+        )}
         <div style={{ background: '#007bff', width: `${kpis.appointmentsToday * 5}px`, height: '20px' }} title="Appointments Chart"></div>
       </div>
     </div>

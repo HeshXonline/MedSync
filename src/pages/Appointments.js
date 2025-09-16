@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ROLES } from '../roles';
 
 const Appointments = ({ role, branch }) => {
   const [appointments, setAppointments] = useState([]); // Mock
@@ -45,23 +46,31 @@ const Appointments = ({ role, branch }) => {
         {appointments.map((appt, index) => (
           <div key={index} draggable onDragStart={(e) => handleDragStart(e, index)} onDrop={(e) => handleDrop(e, 'New Time')} onDragOver={(e) => e.preventDefault()}>
             {appt.time} - {appt.status}
-            <button onClick={() => markCompleted(index)}>Complete</button>
-            <button onClick={() => alert('Cancel')}>Cancel</button>
+            {(role === ROLES.DOCTOR || role === ROLES.SYSTEM_ADMIN) && (
+              <button onClick={() => markCompleted(index)}>Complete</button>
+            )}
+            {(role !== ROLES.PATIENT) && (
+              <button onClick={() => alert('Cancel')}>Cancel</button>
+            )}
           </div>
         ))}
       </div>
 
       {/* Appointment Form */}
-      <form onSubmit={handleCreate}>
-        <input value={formData.patientId} onChange={(e) => setFormData({...formData, patientId: e.target.value})} placeholder="Patient ID" />
-        <input value={formData.doctorId} onChange={(e) => setFormData({...formData, doctorId: e.target.value})} placeholder="Doctor ID" />
-        <input type="datetime-local" value={formData.time} onChange={(e) => setFormData({...formData, time: e.target.value})} />
-        <label>
-          <input type="checkbox" checked={formData.emergency} onChange={(e) => setFormData({...formData, emergency: e.target.checked})} /> Emergency Walk-in
-        </label>
-        {error && <div className="error">{error}</div>}
-        <button type="submit">Schedule</button>
-      </form>
+      {(role !== ROLES.DOCTOR && role !== ROLES.BILLING_STAFF) && (
+        <form onSubmit={handleCreate}>
+          <input value={formData.patientId} onChange={(e) => setFormData({...formData, patientId: e.target.value})} placeholder="Patient ID" />
+          {(role !== ROLES.PATIENT) && (
+            <input value={formData.doctorId} onChange={(e) => setFormData({...formData, doctorId: e.target.value})} placeholder="Doctor ID" />
+          )}
+          <input type="datetime-local" value={formData.time} onChange={(e) => setFormData({...formData, time: e.target.value})} />
+          <label>
+            <input type="checkbox" checked={formData.emergency} onChange={(e) => setFormData({...formData, emergency: e.target.checked})} /> Emergency Walk-in
+          </label>
+          {error && <div className="error">{error}</div>}
+          <button type="submit">Schedule</button>
+        </form>
+      )}
     </div>
   );
 };
