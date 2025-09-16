@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ROLES } from '../roles';
 
 const Reporting = ({ role }) => {
   const [reportType, setReportType] = useState('Appointment Summary');
@@ -25,9 +26,9 @@ const Reporting = ({ role }) => {
       <select value={reportType} onChange={(e) => setReportType(e.target.value)}>
         <option>Appointment Summary</option>
         <option>Doctor Revenue</option>
-        <option>Outstanding Balances</option>
+        {(role === ROLES.BILLING_STAFF || role === ROLES.SYSTEM_ADMIN) && <option>Outstanding Balances</option>}
         <option>Treatment Categories</option>
-        <option>Insurance vs Out-of-Pocket</option>
+        {(role === ROLES.BILLING_STAFF || role === ROLES.SYSTEM_ADMIN) && <option>Insurance vs Out-of-Pocket</option>}
       </select>
       <select value={period} onChange={(e) => setPeriod(e.target.value)}>
         <option>Daily</option>

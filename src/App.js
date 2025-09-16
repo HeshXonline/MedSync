@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
+import Layout from "./components/Layout";
+import RequireRole from "./components/RequireRole";
+import { pageAccess } from "./roles";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
@@ -26,50 +29,74 @@ function App() {
 
   return (
     <>
-      {isAuthenticated && (
-        <Header
-          role={userRole}
-          branch={selectedBranch}
-          setBranch={setSelectedBranch}
-          onLogout={handleLogout}
-        />
-      )}
-
       <Routes>
         <Route
           path="/login"
           element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/" replace />}
         />
-        <Route
-          path="/"
-          element={isAuthenticated ? <Dashboard role={userRole} /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/patients"
-          element={isAuthenticated ? <Patients role={userRole} /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/appointments"
-          element={
-            isAuthenticated ? (
-              <Appointments role={userRole} branch={selectedBranch} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route
-          path="/treatments"
-          element={isAuthenticated ? <Treatments role={userRole} /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/billing"
-          element={isAuthenticated ? <Billing role={userRole} /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/reporting"
-          element={isAuthenticated ? <Reporting role={userRole} /> : <Navigate to="/login" replace />}
-        />
+        {isAuthenticated ? (
+          <Route
+            element={
+              <Layout
+                role={userRole}
+                branch={selectedBranch}
+                setBranch={setSelectedBranch}
+                onLogout={handleLogout}
+              />
+            }
+          >
+            <Route
+              path="/"
+              element={
+                <RequireRole allowedRoles={pageAccess.dashboard} role={userRole}>
+                  <Dashboard role={userRole} />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/patients"
+              element={
+                <RequireRole allowedRoles={pageAccess.patients} role={userRole}>
+                  <Patients role={userRole} />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                <RequireRole allowedRoles={pageAccess.appointments} role={userRole}>
+                  <Appointments role={userRole} branch={selectedBranch} />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/treatments"
+              element={
+                <RequireRole allowedRoles={pageAccess.treatments} role={userRole}>
+                  <Treatments role={userRole} />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/billing"
+              element={
+                <RequireRole allowedRoles={pageAccess.billing} role={userRole}>
+                  <Billing role={userRole} />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/reporting"
+              element={
+                <RequireRole allowedRoles={pageAccess.reporting} role={userRole}>
+                  <Reporting role={userRole} />
+                </RequireRole>
+              }
+            />
+          </Route>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        )}
       </Routes>
     </>
   );
