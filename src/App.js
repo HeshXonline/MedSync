@@ -8,6 +8,7 @@ import Appointments from "./pages/Appointments";
 import Treatments from "./pages/Treatments";
 import Billing from "./pages/Billing";
 import Reporting from "./pages/Reporting";
+import SupportHelp from "./pages/SupportHelp";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -69,6 +70,10 @@ function App() {
         <Route
           path="/reporting"
           element={isAuthenticated ? <Reporting role={userRole} /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/support"
+          element={isAuthenticated ? <SupportHelp role={userRole} /> : <Navigate to="/login" replace />}
         />
       </Routes>
     </>

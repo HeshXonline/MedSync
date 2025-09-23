@@ -20,6 +20,7 @@ const Header = ({ role, branch, setBranch, onLogout }) => {
           <li><Link to="/treatments">Treatments</Link></li>
           <li><Link to="/billing">Billing</Link></li>
           <li><Link to="/reporting">Reporting</Link></li>
+          <li><Link to="/support">Support</Link></li>
         </ul>
       </nav>
       <div>Quick Actions: 
